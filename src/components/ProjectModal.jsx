@@ -42,6 +42,7 @@ const ProjectModal = ({ selectedProject, onClose }) => {
     setIsClosing(true);
     setTimeout(() => {
       document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
       setIsClosing(false);
       onClose();
     }, 400);
@@ -59,21 +60,73 @@ const ProjectModal = ({ selectedProject, onClose }) => {
   };
 
   useEffect(() => {
-    const handleEscape = (e) => {
+    const handleWheel = (e) => {
+      const modalContent = document.querySelector(".enhanced-scrollbar");
+      if (modalContent && !modalContent.contains(e.target)) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      const modalContent = document.querySelector(".enhanced-scrollbar");
+      if (modalContent && !modalContent.contains(e.target)) {
+        e.preventDefault();
+      }
+    };
+
+    const handleKeyDown = (e) => {
       if (e.key === "Escape" && !galleryOpen && !isClosing) {
         handleCloseModal();
+        return;
+      }
+
+      const modalContent = document.querySelector(".enhanced-scrollbar");
+      const activeElement = document.activeElement;
+
+      if (
+        [
+          "ArrowUp",
+          "ArrowDown",
+          "Space",
+          "PageUp",
+          "PageDown",
+          "Home",
+          "End",
+        ].includes(e.code)
+      ) {
+        if (
+          modalContent &&
+          !modalContent.contains(activeElement) &&
+          !modalContent.contains(e.target)
+        ) {
+          e.preventDefault();
+        }
       }
     };
 
     if (project) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
-    }
+      const scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
+      const originalOverflow = document.body.style.overflow;
+      const originalPaddingRight = document.body.style.paddingRight;
 
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
-    };
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+
+      document.addEventListener("wheel", handleWheel, { passive: false });
+      document.addEventListener("touchmove", handleTouchMove, {
+        passive: false,
+      });
+      document.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = originalPaddingRight;
+        document.removeEventListener("wheel", handleWheel);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    }
   }, [project, galleryOpen, isClosing]);
 
   if (!project) return null;
@@ -303,7 +356,7 @@ const ProjectModal = ({ selectedProject, onClose }) => {
                   }`}
                 >
                   <h3 className="text-2xl font-semibold mb-6 text-white">
-                    Challenges & Solutions
+                    Desafios
                   </h3>
                   <div className="grid grid-cols-1 gap-4">
                     {project.challenges.map((challenge, index) => (

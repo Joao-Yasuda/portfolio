@@ -66,8 +66,8 @@ const ProjectsSection = () => {
         "Este portfólio foi desenvolvido com foco em performance, acessibilidade e identidade visual. Apresenta uma estrutura limpa e responsiva, com seções dedicadas à experiência profissional, projetos detalhados, competências técnicas e contato. Implementado com ReactJs, integração com animações suaves via Framer Motion e design responsivo com Tailwind CSS. Reflete minha trajetória como desenvolvedor e funciona como vitrine dinâmica do meu trabalho.",
       tech: ["React", "Tailwind CSS", "Framer Motion", "Spline"],
       images: ["../assets/img/portfolio.png"],
-      github: "https://github.com/seu-usuario/seu-repo-portfolio",
-      demo: "joaomurat.com",
+      github: "https://github.com/Joao-Yasuda/portfolio",
+      demo: "",
       category: "Frontend",
       iconType: "Globe",
       duration: "2 semanas",
@@ -309,22 +309,6 @@ const ProjectsSection = () => {
                       <span>{project.images.length} fotos</span>
                     </div>
                   )}
-                  <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                    <a
-                      href={project.github}
-                      className="p-3 bg-black/70 backdrop-blur-sm rounded-full hover:bg-black/90 transition-all duration-300 border border-gray-700/50 hover:border-gray-600/50"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Github className="w-4 h-4" />
-                    </a>
-                    <a
-                      href={project.demo}
-                      className="p-3 bg-black/70 backdrop-blur-sm rounded-full hover:bg-black/90 transition-all duration-300 border border-gray-700/50 hover:border-gray-600/50"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  </div>
                 </div>
                 <div className="p-8 relative z-10">
                   <h3 className="text-2xl font-bold mb-4 group-hover:text-gray-300 transition-colors duration-300 leading-tight">

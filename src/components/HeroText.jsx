@@ -1,8 +1,45 @@
-import { FlipWords } from "./FlipWords";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const FlipWords = ({ words, className = "" }) => {
+  const [currentWord, setCurrentWord] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsVisible(false);
+      setTimeout(() => {
+        setCurrentWord((prev) => (prev + 1) % words.length);
+        setIsVisible(true);
+      }, 500);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [words.length]);
+
+  return (
+    <div className={`inline-block ${className}`}>
+      <AnimatePresence mode="wait">
+        {isVisible && (
+          <motion.span
+            key={currentWord}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="text-white"
+          >
+            {words[currentWord]}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 const HeroText = () => {
   const words = ["Resultado", "Soluções", "Experiências", "Inovação"];
+
   const variants = {
     hidden: { opacity: 0, x: -50 },
     visible: { opacity: 1, x: 0 },
@@ -18,18 +55,13 @@ const HeroText = () => {
     visible: { height: "calc(95vh - 10rem)", opacity: 1 },
   };
 
-  const mobileLineVariants = {
-    hidden: { height: 0, opacity: 0 },
-    visible: { height: "40vh", opacity: 1 },
-  };
-
   const dotVariants = {
     hidden: { opacity: 0, scale: 0 },
     visible: { opacity: 1, scale: 1 },
   };
 
   return (
-    <div className="relative z-20 w-full h-full flex items-center justify-center md:justify-start md:items-start md:mt-40 px-4 md:px-0">
+    <div className="relative z-20 w-full h-screen flex items-center justify-center md:justify-start md:items-start md:mt-40 px-4 md:px-0 overflow-hidden bg-transparent">
       <div className="relative flex-col hidden md:flex c-space">
         <div className="absolute left-0 top-0">
           <motion.div
@@ -47,7 +79,7 @@ const HeroText = () => {
             }}
           />
           <motion.div
-            className="w-3 h-3 bg-gray-500/50 rounded-full -ml-1"
+            className="w-3 h-3 bg-gray-500/50 rounded-full absolute -left-1 "
             variants={dotVariants}
             initial="hidden"
             animate="visible"
@@ -57,16 +89,6 @@ const HeroText = () => {
               ease: "easeOut",
             }}
           />
-          <motion.div
-            className="flex md:hidden items-center space-x-2 mt-3"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.2, duration: 0.8 }}
-          >
-            <div className="w-8 h-px bg-white/60"></div>
-            <div className="w-1 h-1 bg-white/80 rounded-full"></div>
-            <div className="w-12 h-px bg-gradient-to-r from-white/60 to-transparent"></div>
-          </motion.div>
         </div>
         <div>
           <motion.h1
@@ -120,102 +142,90 @@ const HeroText = () => {
           </div>
         </div>
       </div>
-      <div className="relative flex flex-col md:hidden w-full h-full justify-center items-start text-left px-6">
-        <motion.div
-          className="absolute top-8 left-6 right-6 h-px bg-gradient-to-r from-white/80 via-white/40 to-transparent"
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ delay: 0.5, duration: 1.5, ease: "easeOut" }}
-          style={{ transformOrigin: "left" }}
-        />
-        <motion.div
-          className="absolute top-4 right-8 w-2 h-2 bg-white/60 rounded-full"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-        />
-        <motion.div
-          className="absolute top-6 right-12 w-1 h-1 bg-white/40 rounded-full"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.4, duration: 0.6 }}
-        />
-        <div className="flex flex-col items-start space-y-3 w-full relative z-10">
-          <motion.h1
-            className="text-4xl sm:text-5xl font-medium text-gray leading-tight drop-shadow-lg"
-            style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
+
+      <div className="relative flex flex-col md:hidden w-full h-full justify-center items-center text-center px-6 py-8 max-w-sm mx-auto">
+        <div className="relative z-10 p-6">
+          <motion.div
+            className="relative mb-8"
             variants={mobileVariants}
             initial="hidden"
             animate="visible"
-            transition={{ delay: 1, duration: 0.8 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
           >
-            Eu sou o João
-          </motion.h1>
+            <h1 className="text-3xl sm:text-4xl font-light text-white/90 mb-2">
+              Prazer,
+            </h1>
+            <h2 className="text-6xl sm:text-6xl font-bold text-white">João</h2>
+          </motion.div>
+
           <motion.div
-            className="w-16 h-0.5 bg-white/80 mt-2"
+            className="mb-8"
+            variants={mobileVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 1.0, duration: 0.8 }}
+          >
+            <p className="text-2xl sm:text-2xl font-medium text-gray-300 leading-relaxed mb-2">
+              Desenvolvedor Web
+            </p>
+            <p className="text-2xl sm:text-2xl font-medium text-gray-300 leading-relaxed">
+              que acredita em
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="flex justify-center mb-6"
             initial={{ scaleX: 0, opacity: 0 }}
             animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ delay: 1.8, duration: 0.8, ease: "easeOut" }}
-            style={{ transformOrigin: "left" }}
-          />
-          <motion.p
-            className="text-5xl sm:text-6xl font-bold text-white leading-tight drop-shadow-lg"
-            style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
-            variants={mobileVariants}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 1.3, duration: 0.8 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
           >
-            Desenvolvedor <br /> Dedicado a construir
-          </motion.p>
+            <div className="w-16 h-px bg-gray-400/50"></div>
+          </motion.div>
+
           <motion.div
+            className="mb-6"
             variants={mobileVariants}
             initial="hidden"
             animate="visible"
-            transition={{ delay: 1.6, duration: 0.8 }}
-            className="py-1"
+            transition={{ delay: 1.4, duration: 0.8 }}
           >
             <FlipWords
               words={words}
-              className="font-black text-white text-6xl sm:text-7xl leading-none drop-shadow-lg"
-              style={{ textShadow: "3px 3px 10px rgba(0,0,0,0.9)" }}
+              className="font-black text-5xl sm:text-6xl leading-tight text-white"
             />
           </motion.div>
+
+          <motion.div
+            className="flex justify-center mb-6"
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ delay: 1.6, duration: 0.8 }}
+          >
+            <div className="w-8 h-px bg-gray-500/40"></div>
+          </motion.div>
+
           <motion.p
-            className="text-4xl sm:text-5xl font-bold text-white leading-tight drop-shadow-lg"
-            style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
+            className="text-xl sm:text-2xl font-medium text-gray-300 leading-relaxed"
             variants={mobileVariants}
             initial="hidden"
             animate="visible"
-            transition={{ delay: 1.9, duration: 0.8 }}
+            transition={{ delay: 1.8, duration: 0.8 }}
           >
-            Web Applications
+            Através da tecnologia
           </motion.p>
         </div>
+
         <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 md:hidden"
-          initial={{ opacity: 0, y: -10 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.5, duration: 0.8 }}
         >
-          <div className="flex flex-col items-center space-y-3">
-            <span
-              className="text-white text-sm font-semibold drop-shadow-lg"
-              style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
-            >
-              Scroll
-            </span>
-            <div className="w-px h-12 bg-white shadow-lg"></div>
-            <motion.div
-              className="w-2 h-2 bg-white rounded-full shadow-lg"
-              animate={{ y: [0, 12, 0] }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            ></motion.div>
-          </div>
+          <motion.div
+            className="w-1 h-8 bg-gray-400/40 rounded-full"
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
         </motion.div>
       </div>
     </div>
