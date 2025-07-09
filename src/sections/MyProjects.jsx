@@ -89,8 +89,7 @@ const ProjectsSection = () => {
     },
     {
       id: 3,
-      title:
-        "DevPulse — Plataforma de Observabilidade para Times de Desenvolvimento",
+      title: "DevPulse — Plataforma de Observabilidade",
       description:
         "Uma plataforma open-source de observabilidade desenvolvida com arquitetura de microserviços, focada em monitoramento em tempo real, métricas customizadas, ingestão de logs e alertas inteligentes. Projetada para desenvolvedores exigentes e times modernos.",
       detailedDescription:
@@ -99,6 +98,7 @@ const ProjectsSection = () => {
         "React.js",
         "Tailwind",
         "WebSocket",
+        "Kafka",
         "Chart.js",
         "Go (Gin)",
         "GORM",
@@ -109,7 +109,7 @@ const ProjectsSection = () => {
         "RBAC",
       ],
       images: ["../assets/img/DevPulse.png", "../assets/img/DevPulse2.png"],
-      github: "",
+      github: "https://github.com/Joao-Yasuda/DevPulse",
       demo: "",
       category: "Full Stack",
       iconType: "Code",
